@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdatePost;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class PostController extends Controller
         return view('admin.posts.create');
     }
 
-    public function store(Request $request)//faz injeção de depêndencia para dps acessar os dados do post
+    public function store(StoreUpdatePost $request)//faz injeção de depêndencia para dps acessar os dados do post
     {//$request é um objeto de Request; mesma coisa que $request = new Request;
         
 
