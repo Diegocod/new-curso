@@ -33,7 +33,9 @@ class PostController extends Controller
         array, específicando o valor para cada coluna, exemplo: 
         Post::create(['title' => $request->title]);*/
 
-        return redirect()->route('posts.index');  
+        return redirect()
+            ->route('posts.index')
+            ->with('message', 'Post criado com sucesso');
 
     }
 
@@ -74,6 +76,37 @@ class PostController extends Controller
 
     }
 
+    public function edit($id)
+    {    
+        $post = Post::find($id);
+
+        if (!$post) {
+            return redirect()->back();//back() volta de onde veio
+        }
+        
+        return view('admin.posts.edit', compact('post'));
+    }
+
+    public function update(StoreUpdatePost $request, $id)
+    {    //primeiro faz a injeção de dependencia, dps passa os parametros como ex: $id
+        $post = Post::find($id);
+        
+        if (!$post) {
+            return redirect()->back();//back() volta de onde veio
+        }
+        
+        $post->update($request->all());/*todos os dados já vem validados por causa 
+         do StoreUpdatePost que foi configurado para que somente determinadas colunas
+         sejam modificadas.
+        */
+        
+        return redirect()
+            ->route('posts.index')
+            ->with('message', 'Post atualizado com sucesso');
+
+
+    }
+    
 
 
 }
