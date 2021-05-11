@@ -5,6 +5,8 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 
+Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 Route::post('/posts', [PostController::class, 'store'] )->name('posts.store'); /*não tem problema ter duas urls com
 o mesmo nome, desde que a requisição seja diferente ex: post!=get   */
 

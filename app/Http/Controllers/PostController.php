@@ -20,7 +20,6 @@ class PostController extends Controller
 
     public function create()
     {
-        
         return view('admin.posts.create');
     }
 
@@ -37,4 +36,44 @@ class PostController extends Controller
         return redirect()->route('posts.index');  
 
     }
+
+    public function show($id)//só colocar  $id, que vai receber o $id da rota
+    {
+        //$post = Post::where('id', $id)->first();
+        /*o método get() retorna uma collection (um array)
+        no nosso caso queremos só um registro então usamos o método firt();
+        /*where pega todos posts onde o valor da coluna 'id' é igual
+        da variavel $id*/
+
+        //outra maneira: 
+        $post = Post::find($id);// por default já recupera o registro pelo id
+       
+        //fazendo verificação se o valor existe, se não existir da um redirect
+        if (!$post) {/*se retornar false ele entra na condição 
+        porque !false vira true. */
+            return redirect()->route('posts.index');
+    
+        }
+        
+        return view('admin.posts.show', compact('post'));/*retorna para uma view 
+        com msm nome do método do PostController*/
+    }
+
+    public function destroy($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post)
+            return redirect()->route('posts.index');
+    
+       $post->delete();
+       
+       return redirect()
+            ->route('posts.index')
+            ->with('message', 'Post deletado com sucesso');
+
+    }
+
+
+
 }
