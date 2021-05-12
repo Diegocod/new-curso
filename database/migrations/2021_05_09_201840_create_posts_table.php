@@ -15,8 +15,9 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title', );// parametros(nome da coluna, quantidade de caracteres)por padrão é 260 caracteres
-            $table->text('content');//onde vai ficar o conteúdo da página
+            $table->string('title', 160)->unique();//não haverá nomes iguais
+            $table->string('image');
+            $table->text('content')->nullable();//permite nulos
             $table->timestamps();
         });
     }
