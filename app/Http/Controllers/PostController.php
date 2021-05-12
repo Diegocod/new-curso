@@ -109,6 +109,20 @@ class PostController extends Controller
 
 
     }
+
+
+    public function search(Request $request)
+    {
+        $filters = $request->except('_token');
+
+        $posts = Post::where('title', '=', "{$request->search}")
+                    ->orWhere('content', 'LIKE', "%{$request->search}%")
+                    ->paginate(1);
+        //dd($posts);
+        
+       return view('admin.posts.index', compact('posts', 'filters'));                
+
+    }
     
 
 

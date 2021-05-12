@@ -5,6 +5,7 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 
+Route::any('/posts/search', [PostController::class, 'search'])->name('posts.search');
 Route::get('/posts/create',[PostController::class, 'create'])->name('posts.create');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::post('/posts', [PostController::class, 'store'] )->name('posts.store'); /*não tem problema ter duas urls com
