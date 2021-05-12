@@ -10,8 +10,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy('id', 'desc')->paginate();
-        //latest ex: Post::latest()->paginate();
+        //$posts = Post::orderBy('id', 'desc')->paginate();
+        $posts = Post::latest()->paginate(); //ordena pelos mais recentes
         //paginate(<numero de elementos por pag>); o valor default é 15
         //orderBy(<nome da coluna>); por padrão ordena asc (do menor para o maior)
 
