@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+
 use App\Http\Requests\StoreUpdatePost;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -27,11 +29,19 @@ class PostController extends Controller
     }
 
     public function store(StoreUpdatePost $request)//faz injeção de depêndencia para dps acessar os dados do post
-    {//$request é um objeto de Request; mesma coisa que $request = new Request;
+    {   //$request é um objeto de Request; mesma coisa que $request = new Request;
+        $data = $request->all();
         
+        if($request->image->isValid()) {
+
+            $nameFile = Str::of($request->title)->slug('-') . '.' . $request->image->getClientOriginalExtension();
+            $image = $request->image->storeAs('posts' , $nameFile);
+            $data['image'] = $image;
+            
+        }
 
         //Acessa o model Post logo abaixo:
-        Post::create($request->all()); /*Como o name dos inputs e textarea já corresponde ao nome das colunas da 
+        Post::create($data); /*Como o name dos inputs e textarea já corresponde ao nome das colunas da 
         tabela, é possível passar com o $request->all(), mas se não fosse o caso teria que passa em forma de
         array, específicando o valor para cada coluna, exemplo: 
         Post::create(['title' => $request->title]);*/
