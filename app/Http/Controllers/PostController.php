@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Str;
 
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreUpdatePost;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -80,6 +81,9 @@ class PostController extends Controller
 
         if (!$post)
             return redirect()->route('posts.index');
+        
+        if (Storage::exists($post->image))
+            Storage::delete($post->image);
     
        $post->delete();
        
@@ -101,17 +105,24 @@ class PostController extends Controller
     }
 
     public function update(StoreUpdatePost $request, $id)
-    {    //primeiro faz a injeção de dependencia, dps passa os parametros como ex: $id
-        $post = Post::find($id);
+    {   
+        $data = $request->all();
         
-        if (!$post) {
+        if (!$post = Post::find($id)) {
             return redirect()->back();//back() volta de onde veio
         }
+
+        if ($request->image->isValid()) {
+            if (Storage::exists($post->image))
+                Storage::delete($post->image);
+
+            $nameFile = Str::of($request->title)->slug('-') . '.' . $request->image->getClientOriginalExtension();
+            $image = $request->image->storeAs('posts' , $nameFile);
+            $data['image'] = $image;
+            
+        }
         
-        $post->update($request->all());/*todos os dados já vem validados por causa 
-         do StoreUpdatePost que foi configurado para que somente determinadas colunas
-         sejam modificadas.
-        */
+        $post->update($data);
         
         return redirect()
             ->route('posts.index')
